@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
         print_usage(argv[0]);
         exit(EXIT_FAILURE);
       }
+      port = strtol(optarg, NULL, 10);
       break;
     }
   }
