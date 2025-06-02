@@ -1,0 +1,17 @@
+[
+  {
+    "arguments": [
+      "/sbin/gcc",
+      "-Werror",
+      "-pedantic",
+      "-I./include",
+      "-c",
+      "-o",
+      "build/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/mistr/code/guess-the-number",
+    "file": "/home/mistr/code/guess-the-number/src/main.c",
+    "output": "/home/mistr/code/guess-the-number/build/main.o"
+  }
+]
