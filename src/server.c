@@ -23,6 +23,7 @@ void run_server(int port) {
   do {
     c = command_recv(client_fd);
     guess = strtol(c->args, NULL, 10);
+    printf("%s:%s\n", c->command, c->args);
     if (guess > num) {
       command_send(client_fd, "GAMEINFO",
                    "Your guess is higher than the number i am thinking.\n");
