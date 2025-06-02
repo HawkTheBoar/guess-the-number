@@ -1,11 +1,41 @@
 #include "pracnet.h"
 #include <arpa/inet.h>
+#include <errno.h>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+// recieves all N bytes, returns -1 on error, 0 on peer disconnected,
+// return total bytes received on success
+int recv_all(int sockfd, void *buffer, int N, int flags) {
+  if (N <= 0 || buffer == NULL)
+    return -1;
+  int received_bytes = 0, total = 0;
+  int expected_bytes = N;
+  char *buff = (char *)buffer;
+  while (total < expected_bytes) {
+    received_bytes = recv(sockfd, buff + total, expected_bytes - total, flags);
+    total += received_bytes;
+    if (received_bytes > 0) {
+      continue;
+    }
+    if (received_bytes == 0) {
+      perror("Peer disconnected while receiving data.\n");
+      return -2;
+    }
+    // error receiving data
+    if (received_bytes == -1) {
+      if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        continue; // Non-blocking mode: retry (if flags allow)
+      }
+      perror("Error receiving data.\n");
+      return -1;
+    }
+  }
+  return total;
+}
 // Starts a server on the desired port
 int server_create(int port) {
   int server_fd;
